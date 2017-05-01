@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "react-starter-kit"]
+	url = https://github.com/kriasoft/react-starter-kit.git
+	fetch = +refs/heads/master:refs/remotes/react-starter-kit/master
+[branch "master"]
+	remote = react-starter-kit
+	merge = refs/heads/master
