@@ -25,7 +25,7 @@ class Post extends React.Component {
     const { post } = this.props
     return (
       <div className={s.root}>
-        <Card>
+        
           <CardHeader
             title={ post.title }
             subtitle="Subtitle"
@@ -37,7 +37,7 @@ class Post extends React.Component {
           <CardActions>
             <FlatButton href={"/post/"+post.slug} label="View Full Post" />
           </CardActions>
-        </Card>
+        
       </div>
     );
   }

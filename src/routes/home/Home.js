@@ -47,7 +47,34 @@ class Home extends React.Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          { posts }
+          <div className="mdl-grid">
+            <div className="mdl-cell mdl-cell--6-col">
+              <div className={s.rightBorder}>
+                <div className={s.contentPadding}> 
+                  { posts }
+                </div>
+              </div>
+            </div>
+            <div className="mdl-cell mdl-cell--6-col">
+              <div className={s.contentPadding}>
+                <div className="mdl-grid mdl-grid--no-spacing">
+                  <div className="mdl-cell mdl-cell--4-col">
+                    <img className={s.imgResponsive} src="https://placeimg.com/300/300/any" />
+                  </div>
+                  <div className="mdl-cell mdl-cell--4-col">
+                    <img className={s.imgResponsive} src="https://placeimg.com/300/300/any" />
+                  </div>
+                  <div className="mdl-cell mdl-cell--4-col">
+                    <img className={s.imgResponsive} src="https://placeimg.com/300/300/any" />
+                  </div>
+                </div>
+                <br />
+                <img src="https://pbs.twimg.com/profile_images/559429368712146946/wiOhw0zd.jpeg" />
+                <h4>Shannon Dittmar </h4>
+                <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
