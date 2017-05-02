@@ -11,22 +11,77 @@ class PostStore extends EventEmitter {
 	constructor() {
 		super();
 		this.user = firebase.auth().currentUser ? firebase.auth().currentUser : null;
-		this.posts = null
+		this.posts = null;
+		this.post = null;
 	}
-	addPost(title, content){
-		console.log(this.user)
-		var user_id = this.user ? this.user.uid : firebase.auth().currentUser.uid
-		var newPostKey = firebase.database().ref().child('posts').push().key;
-		let postData = {
-			title: title,
-			content: content,
-			user_id : user_id
-		}
-		var updates = {};
-		updates['/posts/' + newPostKey] = postData;
-		updates['/user-posts/' + user_id + '/' + newPostKey] = postData;
+	returnSinglePost(){
+		return this.post
+	}
+	getSinglePost(slug){
+		let that = this
+		var ref = firebase.database().ref('posts').orderByChild("slug").equalTo(slug).limitToLast(1);
+		return ref.once("value").then(function (postSnap) {
+			var result = null;
+			postSnap.forEach(function (postSnap) {
+			  that.post = postSnap.val();
+			  that.emit("singlePostRetreived");
+			  return true;
+			});
+		});
+	}	
+	addPostCategory(category, callback){
+		console.log("doing category stuff: ", category)
+		var catRef = firebase.database().ref('categories').orderByChild("title").equalTo(category).limitToLast(1);
+		catRef.once('value', function(snapshot) {
+			console.log("DATA", snapshot.val())
+			if(snapshot.val() == null){
+				console.log("Adding Category")
+				var newPostKey = firebase.database().ref().child('categories').push().key;
+				let catData = {
+					title: category,
+				}
+				var updates = {};
+				updates['/categories/' + newPostKey] = catData;
+				firebase.database().ref().update(updates, function(error, committed, snapshot, dummy){
+					callback(newPostKey) 
+				});
+			}else{
+				snapshot.forEach(function(snapshot) {
+					console.log(snapshot)
+					if(snapshot.val() !== null){
+						console.log("Category Exists: ", snapshot.val())
+						callback(snapshot.key)
+					}
+				})
+			}
+		})
+	}	
+	addPost(title, content, slug, category, excerpt, callback){
+		let that = this
+		if(title && content && slug && category && excerpt && callback){
+			this.addPostCategory(category, function(categoryKey){
+				var user_id = that.user ? that.user.uid : firebase.auth().currentUser.uid
+				var newPostKey = firebase.database().ref().child('posts').push().key;
+				let postData = {
+					title: title,
+					content: content,
+					slug: slug,
+					categoryKey: categoryKey,
+					categoryTitle: category,
+					excerpt: excerpt,
+					user_id : user_id,
+				}
+				var updates = {};
+				updates['/posts/' + newPostKey] = postData;
+				updates['/user-posts/' + user_id + '/' + newPostKey] = postData;
 
-		return firebase.database().ref().update(updates);
+				firebase.database().ref().update(updates, function(error, committed, snapshot, dummy){console.log(error, committed, snapshot, dummy); callback(error, committed, snapshot, dummy) } );
+			
+			})
+		}else{
+			console.log(title, content, slug,  category, excerpt, callback)
+			callback("Some Information was missing...")
+		}
 	}
 	getPostsOnce(){
 		let that = this

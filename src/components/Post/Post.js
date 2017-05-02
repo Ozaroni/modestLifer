@@ -32,10 +32,10 @@ class Post extends React.Component {
             avatar="images/jsa-128.jpg"
           />
           <CardText>
-            { ReactHtmlParser(post.content) }
+            { ReactHtmlParser(post.excerpt) }
           </CardText>
           <CardActions>
-            <FlatButton href="/post" label="Action1" />
+            <FlatButton href={"/post/"+post.slug} label="View Full Post" />
           </CardActions>
         </Card>
       </div>

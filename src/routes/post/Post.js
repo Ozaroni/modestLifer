@@ -12,7 +12,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Post.css';
-
+import ReactHtmlParser from 'react-html-parser';
 import PostStore from "../../data/stores/PostStore"
 
 class Post extends React.Component {
@@ -25,18 +25,17 @@ class Post extends React.Component {
   }
   componentWillMount = () => {
     /*Get single post by slug*/
-    /*PostStore.getPostsOnce()
-    PostStore.on('postsChanged', this._updatePosts)
-    PostStore.retrievePosts()
-    PostStore.on('postsChanged', this._updatePosts);*/
+    PostStore.getSinglePost(this.props.slug)
+    PostStore.on('singlePostRetreived', this._updatePost);
   }
-  _updatePosts = () => {
-    /*this.setState({
-      postData: PostStore.returnPosts()
-    })*/
+  _updatePost = () => {
+    this.setState({
+      postData: PostStore.returnSinglePost()
+    })
   }
   render() {
     const { slug } = this.props
+    const { postData } = this.state
     /*let posts = []
     const {postData} = this.state
     console.log(postData)
@@ -47,8 +46,13 @@ class Post extends React.Component {
     })*/
     return (
 
-      <div className={s.root}>
-        <p> { slug } </p>
+      <div className={s.container}>
+        { postData ? 
+          <div>
+            <h1>{postData.title}</h1> 
+            { ReactHtmlParser(postData.content) }
+          </div>
+        : null } 
       </div>
     );
   }
