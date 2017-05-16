@@ -1975,6 +1975,10 @@ decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
+decorate-component-with-props@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/decorate-component-with-props/-/decorate-component-with-props-1.0.2.tgz#5764d3cf6a58685a522201bad31bff0cb531e5fe"
+
 deep-eql@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-eql/-/deep-eql-0.1.3.tgz#ef558acab8de25206cd713906d74e56930eb69f2"
@@ -2158,7 +2162,72 @@ dottie@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/dottie/-/dottie-1.1.1.tgz#45c2a3f48bd6528eeed267a69a848eaaca6faa6a"
 
-draft-js@0.10.0, draft-js@^0.10.0:
+draft-convert@^1.4.6:
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/draft-convert/-/draft-convert-1.4.6.tgz#0f8308399db4388bea9f7b99f420c28c787f03ee"
+  dependencies:
+    immutable "~3.7.4"
+    invariant "^2.2.1"
+
+draft-js-buttons-plugin@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/draft-js-buttons-plugin/-/draft-js-buttons-plugin-1.0.0.tgz#827db2151069e31b7a928e4f7efacd4887fdf089"
+  dependencies:
+    draft-js ">=0.9.1"
+    react "15.4.2"
+    react-dom "15.4.2"
+
+draft-js-buttons@^2.0.0-beta9:
+  version "2.0.0-beta9"
+  resolved "https://registry.yarnpkg.com/draft-js-buttons/-/draft-js-buttons-2.0.0-beta9.tgz#1e46fc3de2a6b75a45bb13b5f7e924a1b7bd29f3"
+  dependencies:
+    draft-js ">=0.9.1"
+    react ">=15.3.1"
+    union-class-names "^1.0.0"
+
+draft-js-color-picker-plugin@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/draft-js-color-picker-plugin/-/draft-js-color-picker-plugin-1.1.0.tgz#c13eb20602a30954ad3b2f7e40ca17293283942a"
+  dependencies:
+    react "15.4.2"
+    react-dom "15.4.2"
+
+draft-js-emoji-picker-plugin@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/draft-js-emoji-picker-plugin/-/draft-js-emoji-picker-plugin-1.1.0.tgz#655babf7589ebaae588dd9d20b0d5a7eba31bb82"
+  dependencies:
+    react "15.4.2"
+    react-dom "15.4.2"
+
+draft-js-export-html@^0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/draft-js-export-html/-/draft-js-export-html-0.5.4.tgz#e24927da3efe6f3df17f1d7606a9dc6141dbf72d"
+  dependencies:
+    draft-js-utils "^0.1.5"
+
+draft-js-gif-picker-plugin@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/draft-js-gif-picker-plugin/-/draft-js-gif-picker-plugin-1.1.0.tgz#6ee0897a2b014af11ebc8818bfe25e19731b44a3"
+  dependencies:
+    react "15.4.2"
+    react-dom "15.4.2"
+
+draft-js-modal-plugin@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/draft-js-modal-plugin/-/draft-js-modal-plugin-1.0.1.tgz#3435a0a7990f0f31a99f7e270ee05338bffdb1b4"
+  dependencies:
+    draft-js "^0.10.0"
+    draft-js-color-picker-plugin "1.1.0"
+    draft-js-emoji-picker-plugin "1.1.0"
+    draft-js-gif-picker-plugin "1.1.0"
+    react "15.4.2"
+    react-dom "15.4.2"
+
+draft-js-utils@^0.1.5:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/draft-js-utils/-/draft-js-utils-0.1.7.tgz#e2b6927ca620edf1855a4bfc1cf1d21080a70f16"
+
+draft-js@0.10.0, draft-js@>=0.9.1, draft-js@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/draft-js/-/draft-js-0.10.0.tgz#29d16191012b932fdab28a9b37ec1538f421abf6"
   dependencies:
@@ -3872,15 +3941,19 @@ known-css-properties@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/known-css-properties/-/known-css-properties-0.0.7.tgz#9104343a2adfd8ef3b07bdee7a325e4d44ed9371"
 
-last-draft@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/last-draft/-/last-draft-2.1.0.tgz#c0ab1a9879b21fcec04630356a75bf3efcfdde5b"
+last-draft-js-toolbar-plugin@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/last-draft-js-toolbar-plugin/-/last-draft-js-toolbar-plugin-1.1.0.tgz#723b3d9551c6e06d5055900d5d93041842f4a987"
   dependencies:
-    draft-js "0.10.0"
+    decorate-component-with-props "^1.0.2"
+    draft-js "^0.10.0"
+    draft-js-buttons "^2.0.0-beta9"
+    draft-js-buttons-plugin "1.0.0"
+    draft-js-modal-plugin "1.0.1"
     immutable "~3.7.4"
-    linkify-it "^2.0.2"
-    styled-components "^1.2.1"
-    tlds "^1.182.0"
+    react "15.4.2"
+    react-dom "15.4.2"
+    union-class-names "^1.0.0"
 
 lazy-cache@^1.0.3:
   version "1.0.4"
@@ -3925,7 +3998,7 @@ limiter@^1.0.5:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/limiter/-/limiter-1.1.0.tgz#6e2bd12ca3fcdaa11f224e2e53c896df3f08d913"
 
-linkify-it@^2.0.0, linkify-it@^2.0.2:
+linkify-it@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-2.0.3.tgz#d94a4648f9b1c179d64fa97291268bdb6ce9434f"
   dependencies:
@@ -5696,6 +5769,14 @@ react-deep-force-update@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-2.0.1.tgz#4f7f6c12c3e7de42f345992a3c518236fa1ecad3"
 
+react-dom@15.4.2:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
+  dependencies:
+    fbjs "^0.8.1"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
+
 react-dom@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
@@ -5743,7 +5824,15 @@ react-tap-event-plugin@^2.0.1:
   dependencies:
     fbjs "^0.8.6"
 
-react@^15.5.4:
+react@15.4.2:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.4.2.tgz#41f7991b26185392ba9bae96c8889e7e018397ef"
+  dependencies:
+    fbjs "^0.8.4"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
+
+react@>=15.3.1, react@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:
@@ -6801,10 +6890,6 @@ timers-browserify@^2.0.2:
   dependencies:
     setimmediate "^1.0.4"
 
-tlds@^1.182.0:
-  version "1.185.0"
-  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.185.0.tgz#9d5ddaae379778a98e3edc3a131d46a40cbc3ba4"
-
 to-array@0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/to-array/-/to-array-0.1.4.tgz#17e6c11f73dd4f3d74cda7a4ff3238e9ad9bf890"
@@ -6936,6 +7021,10 @@ underscore@1.7.x, underscore@~1.7.0:
 underscore@~1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.4.4.tgz#61a6a32010622afa07963bf325203cf12239d604"
+
+union-class-names@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/union-class-names/-/union-class-names-1.0.0.tgz#9259608adacc39094a2b0cfe16c78e6200617847"
 
 uniq@^1.0.1:
   version "1.0.1"

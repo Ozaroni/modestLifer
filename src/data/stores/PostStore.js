@@ -31,7 +31,7 @@ class PostStore extends EventEmitter {
 	}	
 	addPostCategory(category, callback){
 		console.log("doing category stuff: ", category)
-		var catRef = firebase.database().ref('categories').orderByChild("title").equalTo(category).limitToLast(1);
+		var catRef = firebase.database().ref('categories').child(category).limitToLast(1);
 		catRef.once('value', function(snapshot) {
 			console.log("DATA", snapshot.val())
 			if(snapshot.val() == null){
@@ -43,14 +43,14 @@ class PostStore extends EventEmitter {
 				var updates = {};
 				updates['/categories/' + newPostKey] = catData;
 				firebase.database().ref().update(updates, function(error, committed, snapshot, dummy){
-					callback(newPostKey) 
+					callback(newPostKey, "key") 
 				});
 			}else{
 				snapshot.forEach(function(snapshot) {
 					console.log(snapshot)
 					if(snapshot.val() !== null){
-						console.log("Category Exists: ", snapshot.val())
-						callback(snapshot.key)
+						console.log("Category Exists: ", snapshot.val(), snapshot.key)
+						callback(snapshot.val(), "title")
 					}
 				})
 			}
@@ -59,17 +59,21 @@ class PostStore extends EventEmitter {
 	addPost(title, content, slug, category, excerpt, callback){
 		let that = this
 		if(title && content && slug && category && excerpt && callback){
-			this.addPostCategory(category, function(categoryKey){
+			this.addPostCategory(category, function(categoryReturn, cond){
 				var user_id = that.user ? that.user.uid : firebase.auth().currentUser.uid
 				var newPostKey = firebase.database().ref().child('posts').push().key;
+				console.log(cond, category, categoryReturn)
+				let catKey = cond == "key" ? category : categoryReturn 
+				let catTitle = cond == "title" ? categoryReturn : category
 				let postData = {
 					title: title,
 					content: content,
 					slug: slug,
-					categoryKey: categoryKey,
-					categoryTitle: category,
+					categoryKey: catKey,
+					categoryTitle: catTitle,
 					excerpt: excerpt,
 					user_id : user_id,
+					date: new Date(),
 				}
 				var updates = {};
 				updates['/posts/' + newPostKey] = postData;
@@ -98,6 +102,22 @@ class PostStore extends EventEmitter {
 	}
 	returnPosts(){
 		return this.posts
+	}
+	getCategoriesOnce(){
+		let that = this
+		var postsRef = firebase.database().ref('categories');
+		postsRef.once('value', function(snapshot) {
+			that.categories = snapshot.val()
+			that.emit("categoriesRetreived");
+			/*snapshot.forEach(function(childSnapshot) {
+				var childKey = childSnapshot.key;
+				var childData = childSnapshot.val();
+				_.merge(that.posts, {childKey, childData})
+			})*/
+		})
+	}
+	returnCategories(){
+		return this.categories
 	}
 	retrievePosts(){
 		let that = this

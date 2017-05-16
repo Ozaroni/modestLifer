@@ -6,9 +6,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-require('../../../node_modules/last-draft/lib/styles/ld.css')
-
-require('../../../node_modules/last-draft/lib/styles/draft.css')
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -19,7 +16,6 @@ var firebase = require('firebase');
 import UserStore from "../../data/stores/UserStore"
 import PostStore from "../../data/stores/PostStore"
 import history from '../../history';
-
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -27,27 +23,17 @@ import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-
-import {Editor, editorStateFromHtml, editorStateToHtml, editorStateFromRaw, editorStateFromText, editorStateToJSON} from 'last-draft'
-
-import video from 'ld-video'
-import html from 'ld-html'
-
-let plugins = [video, html]
-
-let basePost = "Add Post Content Here!"
-let baseExcerpt = "Add Post Excerpt Here!"
+import BlogContentEditor from "./BlogContentEditor"
+import {Editor, EditorState, RichUtils, AtomicBlockUtils, convertToRaw } from 'draft-js';
+import {convertFromHTML, convertToHTML} from 'draft-convert';
 
 class Admin extends React.Component {
   constructor(props) {
     super(props);
-    const INITIAL_POST_STATE = editorStateFromText(basePost)
-    const INITIAL_EXCERPT_STATE = editorStateFromText(baseExcerpt)
     this.state = { 
-      value: INITIAL_POST_STATE,
-      excerpt: INITIAL_EXCERPT_STATE, 
+      excerpt: null,
       user: UserStore.getUser(),
-      categoryValue: 0, 
+      categoryValue: "0"
     }
   }
 
@@ -56,7 +42,13 @@ class Admin extends React.Component {
   };
   componentWillMount = () => {
     UserStore.on('userChanged', this._updateUser);
-    //PostStore.getCategories()
+    PostStore.getCategoriesOnce()
+    PostStore.on('categoriesRetreived', this._setCategories)
+  }
+  _setCategories = () => {
+    this.setState({
+      availableCategories: PostStore.returnCategories(),
+    });
   }
   _updateUser = () => {
     console.log("Updating User")
@@ -79,8 +71,11 @@ class Admin extends React.Component {
     }
   }
   addPost = () => {
-    const { postTitle, savableValue, postSlug, savableValue_excerpt, postCategory } = this.state
-    let addPost = PostStore.addPost( postTitle, savableValue, postSlug, postCategory, savableValue_excerpt, this.postCallback )
+    const { postTitle, savableValue, postSlug, savableValue_excerpt, postCategory, categoryValue } = this.state
+    let excerptHtml = JSON.stringify(convertToRaw(savableValue_excerpt.getCurrentContent()))
+    let postHtml = JSON.stringify(convertToRaw(savableValue.getCurrentContent()))
+    const passCategory = categoryValue != "0" ? categoryValue : postCategory
+    let addPost = PostStore.addPost( postTitle, postHtml, postSlug, passCategory, excerptHtml, this.postCallback )
   }
   handleTitleChange = (event) => {
     this.setState({
@@ -97,20 +92,37 @@ class Admin extends React.Component {
       postSlug: event.target.value,
     });
   };
-  handleCategoryChange = (event) => {
+  handleCategoryChange = (event, cond) => {
+    console.log(cond)
+    cond == "dropdown" ?
+    this.setState({
+      categoryValue: value,
+    })
+    :
     this.setState({
       postCategory: event.target.value,
-    });
+    })
+  };
+  handleCategorySelect = (event, index, value) => {
+    this.setState({
+      categoryValue: value,
+    })
+    
   };
   editorChange_excerpt = (editorState) => {
-    this.setState({ excerpt: editorState, savableValue_excerpt: editorStateToHtml(editorState)})
+    console.log("HERE")
+    this.setState({ savableValue_excerpt: editorState })
+    //this.setState({ editorStateExcerpt: value })
+    
   }
   editorChange = (editorState) => {
-    this.setState({ value: editorState, savableValue: editorStateToHtml(editorState)})
+    console.log("HERE")
+    this.setState({ savableValue: editorState })
+    //this.setState({ editorState: editorState })
   }
   render() {
     
-    const { user, value, categoryValue, excerpt } = this.state
+    const { user, value, categoryValue, excerpt, availableCategories } = this.state
     const style={
       paperContent: {
         padding: "20px",
@@ -119,49 +131,56 @@ class Admin extends React.Component {
         margin:"5px 0"
       },
       dropdownmenu: {
-        paddingLeft: "0px"
+        paddingLeft: "0px",
+        display: "inline-block",
       },
       underlineStyle: {
         paddingLeft: "0px"
-      }
+      },
+      editorHolder:{
+        padding: "0px",
+        border: "0px solid #ddd",
+        minHeight: "300px",
+        marginBottom: "20px",
+      },
+      textField: {
+        width: "100%"
+      },
     }
+    let categoryItems = _.map(availableCategories, function(category, key){
+      return <MenuItem value={key} primaryText={category.title} />
+    })
+    categoryItems = categoryItems.concat(<MenuItem value="0" primaryText="Select a category..." />)
     return (
        user ?
       <div className={s.container}>
-
         <div className="mdl-grid">
-          <div className="mdl-cell mdl-cell--4-col">
+          <div className="mdl-cell mdl-cell--12-col">
             <Paper style={style.paperContent}>
               <h4 style={style.paperContentTitle}>Post Information</h4>
-              <TextField onChange={this.handleTitleChange} hintText="Post Title"/> <br />
-              <TextField onChange={this.handleSlugChange} hintText="Post Slug"/> <br />
+              <TextField style={style.textField} onChange={this.handleTitleChange} hintText="Post Title"/> <br />
+              <TextField style={style.textField} onChange={this.handleSlugChange} hintText="Post Slug"/> <br />
               <TextField onChange={this.handleCategoryChange} hintText="New Post Category"/> <br />
-              <DropDownMenu underlineStyle={style.underlineStyle} style={style.dropdownmenu} value={categoryValue} onChange={this.handleCategoryChange}>
-                <MenuItem value={0} primaryText="Existing Post Category" />
-                <MenuItem value={2} primaryText="Every Night" />
-                <MenuItem value={3} primaryText="Weeknights" />
-                <MenuItem value={4} primaryText="Weekends" />
-                <MenuItem value={5} primaryText="Weekly" />
+              <DropDownMenu underlineStyle={style.underlineStyle} style={style.dropdownmenu} value={categoryValue} onChange={this.handleCategorySelect}>
+                {categoryItems}
               </DropDownMenu>
-              <Editor
-                plugins={plugins}
-                editorState={this.state.excerpt}
-                placeholder='Enter text...'
-                onChange={this.editorChange_excerpt} 
-                sidebarVisibleOn='always'/>
+            </Paper>
+          </div>
+          <div className="mdl-cell mdl-cell--12-col">
+            <Paper style={style.paperContent}>
+              <h4 style={style.paperContentTitle}>Post Excerpt</h4>
+              <div style={style.editorHolder}>
+                <BlogContentEditor passState={this.editorChange_excerpt.bind(this)}/>
+              </div>
             </Paper> 
           </div>
-          <div className="mdl-cell mdl-cell--8-col">
+          <div className="mdl-cell mdl-cell--12-col">
             <Paper style={style.paperContent}>
               <h4 style={style.paperContentTitle}>Post Content</h4>
-              <Editor
-                editorState={this.state.value}
-                placeholder='Enter text...'
-                onChange={this.editorChange} 
-                sidebarVisibleOn='always'/>
-                
+              <div style={style.editorHolder}>
+                <BlogContentEditor passState={this.editorChange.bind(this)}/>
+              </div>
               <RaisedButton onClick={this.addPost} label="Add Post" />
-              <RaisedButton label="Action2" />
             </Paper> 
           </div>
         </div>

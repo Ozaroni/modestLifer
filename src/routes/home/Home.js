@@ -59,13 +59,13 @@ class Home extends React.Component {
               <div className={s.contentPadding}>
                 <div className="mdl-grid mdl-grid--no-spacing">
                   <div className="mdl-cell mdl-cell--4-col">
-                    <img className={s.imgResponsive} src="https://placeimg.com/300/300/any" />
+                    <img className={s.imgResponsiveImgFeed} src="https://placeimg.com/300/300/any" />
                   </div>
                   <div className="mdl-cell mdl-cell--4-col">
-                    <img className={s.imgResponsive} src="https://placeimg.com/300/300/any" />
+                    <img className={s.imgResponsiveImgFeed} src="https://placeimg.com/300/300/any" />
                   </div>
                   <div className="mdl-cell mdl-cell--4-col">
-                    <img className={s.imgResponsive} src="https://placeimg.com/300/300/any" />
+                    <img className={s.imgResponsiveImgFeed} src="https://placeimg.com/300/300/any" />
                   </div>
                 </div>
                 <br />

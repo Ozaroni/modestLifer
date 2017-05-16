@@ -15,6 +15,10 @@ import s from './Post.css';
 import ReactHtmlParser from 'react-html-parser';
 import PostStore from "../../data/stores/PostStore"
 
+import {stateToHTML} from 'draft-js-export-html';
+import {Editor, EditorState, RichUtils, AtomicBlockUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import {convertFromHTML, convertToHTML} from 'draft-convert';
+
 class Post extends React.Component {
   
   constructor(){
@@ -29,28 +33,73 @@ class Post extends React.Component {
     PostStore.on('singlePostRetreived', this._updatePost);
   }
   _updatePost = () => {
+    let post = PostStore.returnSinglePost()
     this.setState({
-      postData: PostStore.returnSinglePost()
+      postData: post,
+      postContent: EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)))
     })
+  }
+  _convertPost = (data) => {
+    let postContent = convertToHTML({
+      styleToHTML: (style) => {
+        if (style === 'BOLD') {
+          return <b></b>;
+        }
+      },
+      entityToHTML: (entity, originalText) => {
+        if (entity.type === 'LINK') {
+          return <a href={entity.data.url}>{originalText}</a>;
+        }
+        if (entity.type === 'image') {
+          console.log("RETURNING IMG", entity, originalText)
+          console.log("ENTITY: ", entity.data.src)
+          return <span><img className={s.imgResponsive} src={entity.data.src} />{originalText}</span>
+        }
+        if (entity.type === 'video') {
+          console.log("RETURNING Video", entity, originalText)
+          console.log("ENTITY: ", entity.data.src)
+          var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+          var match = entity.data.src.match(regExp);
+          if (match && match[2].length == 11) {
+              return <iframe width="560" height="315" src={entity.data.src} frameborder="0" allowfullscreen></iframe>
+          }
+          else {
+              return <video controls><source src={entity.data.src} />{originalText}</video>
+          }
+          
+        }
+        return originalText;
+      },
+      blockToHTML: (block) => {
+        const type = block.type
+        console.log(type, block)
+        if (type === 'atomic' || type === 'image' || type === 'video') {
+          let url = block.data.src
+          console.log("Block: ", url)
+          return { start: " ", end: " " }
+        }
+        if (type === 'unstyled') {
+          return <p />
+        }
+      }
+    })(data.getCurrentContent())
+    return postContent
   }
   render() {
     const { slug } = this.props
-    const { postData } = this.state
-    /*let posts = []
-    const {postData} = this.state
-    console.log(postData)
-
-    posts = _.map(postData, function(post, index){
-      console.log(post)
-      return <Post key={"post_"+index} post={post} />
-    })*/
+    const { postData, postContent } = this.state
+    let convoContent = "No Content"
+    if(postData){
+      convoContent = this._convertPost(postContent)
+      console.log(postData)
+    }
     return (
 
       <div className={s.container}>
         { postData ? 
           <div>
             <h1>{postData.title}</h1> 
-            { ReactHtmlParser(postData.content) }
+            { ReactHtmlParser(convoContent) }
           </div>
         : null } 
       </div>

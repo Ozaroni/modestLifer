@@ -14,3 +14,7 @@
 .root {
   padding-top: 30px;
 }
+.imgResponsive {
+	width: auto;
+	max-width: 100%;
+}
