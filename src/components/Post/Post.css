@@ -18,3 +18,36 @@
 	width: auto;
 	max-width: 100%;
 }
+.postSplitterContainer{
+	overflow: hidden;
+    margin: 0px 20px;
+}
+.postSplitter{
+	width: 100%;
+	text-align: center;
+	position: relative;
+	max-width: 75px;
+	margin: auto;
+}
+.postSplitter:before{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 1px;
+    width: 400%;
+    left: -400%;
+    background-color: #ccc;
+}
+.postSplitter:after{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 1px;
+    width: 400%;
+    right: -400%;
+    background-color: #ccc;
+}

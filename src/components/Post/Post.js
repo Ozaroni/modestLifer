@@ -10,7 +10,9 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Post.css';
+import PostSplit from './PostSplit';
 
+import {IntlProvider, FormattedDate} from 'react-intl';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import ReactHtmlParser from 'react-html-parser';
@@ -26,29 +28,8 @@ class Post extends React.Component {
       content: EditorState.createWithContent(convertFromRaw(JSON.parse(props.post.excerpt)))
     };
   }
-  viewPost = () => {
-
-  }
-  formatDate = (date) => {
-    /*console.log(date)
-    if(date){
-      var monthNames = [
-        "January", "February", "March",
-        "April", "May", "June", "July",
-        "August", "September", "October",
-        "November", "December"
-      ];
-
-      var day = date.getDate();
-      var monthIndex = date.getMonth();
-      var year = date.getFullYear();
-
-      return day + ' ' + monthNames[monthIndex] + ' ' + year;
-    }*/
-  }
   render() {
     const { post } = this.props
-    const formattedDate = this.formatDate(post.date)
   
     let postContent = convertToHTML({
       styleToHTML: (style) => {
@@ -97,21 +78,15 @@ class Post extends React.Component {
     console.log(postContent)
     return (
       <div className={s.root}>
-        
-          <CardHeader
-            title={ post.title }
-            subtitle={post.date}
-            avatar="images/jsa-128.jpg"
-          />
+          
+          <CardTitle title={ <a href={"/post/"+post.slug} >{post.title}</a> } subtitle={<div><IntlProvider locale="en"><FormattedDate value={post.date} /></IntlProvider> - <i>{post.categoryTitle}</i></div>} />
           <CardText>
             Category: { post.categoryTitle }
           </CardText>
           <CardText>
             { ReactHtmlParser(postContent) }
           </CardText>
-          <CardActions>
-            <FlatButton href={"/post/"+post.slug} label="View Full Post" />
-          </CardActions>
+          <PostSplit url={"/post/"+post.slug} />
       </div>
     );
   }

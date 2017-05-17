@@ -9,15 +9,23 @@
 
 import React from 'react';
 import _ from 'lodash';
+import {IntlProvider, FormattedDate} from 'react-intl';
 import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Post.css';
 import ReactHtmlParser from 'react-html-parser';
 import PostStore from "../../data/stores/PostStore"
+import Sidebar from "../../components/Sidebar/Sidebar"
 
 import {stateToHTML} from 'draft-js-export-html';
 import {Editor, EditorState, RichUtils, AtomicBlockUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import {convertFromHTML, convertToHTML} from 'draft-convert';
+
+import Avatar from 'material-ui/Avatar';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
+import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 
 class Post extends React.Component {
   
@@ -96,12 +104,19 @@ class Post extends React.Component {
     return (
 
       <div className={s.container}>
-        { postData ? 
-          <div>
-            <h1>{postData.title}</h1> 
-            { ReactHtmlParser(convoContent) }
+        <div className="mdl-grid">
+          <div className="mdl-cell mdl-cell--9-col">
+            { postData ? 
+              <div>
+                <h1>{postData.title}</h1> 
+                { ReactHtmlParser(convoContent) }
+              </div>
+            : null }
           </div>
-        : null } 
+          <div className="mdl-cell mdl-cell--3-col">
+            <Sidebar />
+          </div>
+        </div>
       </div>
     );
   }
