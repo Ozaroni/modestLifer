@@ -9,13 +9,15 @@
 
 import React from 'react';
 import _ from 'lodash';
+import axios from 'axios';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import withStyles from 'isomorphic-style-loader/lib/withStyles'
 import s from './Home.css';
 
 import Post from "../../components/Post/Post"
 import PostStore from "../../data/stores/PostStore"
-import RefreshIndicator from 'material-ui/RefreshIndicator';
+import RefreshIndicator from 'material-ui/RefreshIndicator'
+
 class Home extends React.Component {
   
   constructor(){
@@ -35,10 +37,42 @@ class Home extends React.Component {
       postData: PostStore.returnPosts()
     })
   }
+  /*INSTAGRAM
+  5485515897.1677ed0.a82d8ee19e544d05a65c12611d6b7ed4
+  */
   render() {
     let posts = []
     const {postData} = this.state
     console.log(postData)
+
+    let instaUrl = "https://api.instagram.com/v1/users/self/media/recent/?access_token=5485515897.1677ed0.a82d8ee19e544d05a65c12611d6b7ed4&count=1"
+
+    axios.get(instaUrl).then(res => {
+        console.log(res)
+      });
+
+   /* let instaGram = $.ajax({
+        method: "GET",
+        url: instaUrl,
+        dataType: "jsonp",
+        jsonp: "callback",
+        jsonpCallback: "jsonpcallback",
+        success: function(data) {
+            $.each(data.data, function(i, item) {
+                $("#log").val($("#log").val() + item.id + '\n');
+            });
+            $("#log").val($("#log").val() + data.pagination.next_url + '\n');
+
+            // If the next url is not null or blank:
+            if( data.pagination.next_url && count <=50 ) {
+                pollInstagram(data.pagination.next_url, ++count);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            //alert("Check you internet Connection");
+            $("#log").val($("#log").val() + 'Error\n');
+        }
+    });*/
 
     posts = _.map(postData, function(post, index){
       console.log(post)
