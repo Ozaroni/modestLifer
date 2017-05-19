@@ -9,6 +9,9 @@
 
 @import '../variables.css';
 
+body{
+    font-family: 'Raleway', sans-serif;
+}
 
 
 .root {
@@ -50,4 +53,22 @@
     width: 400%;
     right: -400%;
     background-color: #ccc;
+}
+.postTitle{
+    font-family: 'Bowlby One', serif;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0px;
+    color: #6ac87e;
+}
+.postTitle a{
+    color: #6ac87e;
+    text-decoration: none;
+}
+.postTitle a:hover{
+    color: #5bdd76;
+    text-decoration: none;
+}
+.shareButton:hover{
+    background: #6ac87e;
 }

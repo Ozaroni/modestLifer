@@ -47,6 +47,7 @@ class Html extends React.Component {
           <link rel="apple-touch-icon" href="apple-touch-icon.png" />
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
+          <link href="https://fonts.googleapis.com/css?family=Bowlby+One|Raleway:300,300i,700,700i" rel="stylesheet" />
           <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
           {styles.map(style =>
             <style

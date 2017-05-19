@@ -15,7 +15,7 @@ import s from './Home.css';
 
 import Post from "../../components/Post/Post"
 import PostStore from "../../data/stores/PostStore"
-
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 class Home extends React.Component {
   
   constructor(){
@@ -44,14 +44,25 @@ class Home extends React.Component {
       console.log(post)
       return <Post key={"post_"+index} post={post} />
     })
+    const styles = {
+      relativeDiv: {
+        position: "relative",
+        width: "100%",
+      }
+    }
     return (
+      
       <div className={s.root}>
         <div className={s.container}>
           <div className="mdl-grid">
             <div className="mdl-cell mdl-cell--6-col">
               <div className={s.rightBorder}>
                 <div className={s.contentPadding}> 
-                  { posts }
+               { posts.length > 0 ?
+                   posts 
+                  :
+                <div style={styles.relativeDiv}><RefreshIndicator size={40} left={10} top={0} status="loading" /></div>
+              }
                 </div>
               </div>
             </div>
@@ -77,7 +88,7 @@ class Home extends React.Component {
           </div>
         </div>
       </div>
-    );
+      );
   }
 }
 

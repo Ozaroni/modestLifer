@@ -19,6 +19,7 @@ import ReactHtmlParser from 'react-html-parser';
 import {stateToHTML} from 'draft-js-export-html';
 import {Editor, EditorState, RichUtils, AtomicBlockUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import {convertFromHTML, convertToHTML} from 'draft-convert';
+import FontIcon from 'material-ui/FontIcon';
 class Post extends React.Component {
   constructor(props){
     super(props)
@@ -75,15 +76,31 @@ class Post extends React.Component {
       }
     })(this.state.content.getCurrentContent())
 
-    console.log(postContent)
+    const styles={
+      detailsIcon: {
+        color: "#9af1ad",
+        position: "relative",
+        top: "6px",
+      }, 
+      detailsText: {
+        fontSize: '16px',
+        padding: "0 10px",
+      }
+    }
     return (
       <div className={s.root}>
           
-          <CardTitle title={ <a href={"/post/"+post.slug} >{post.title}</a> } subtitle={<div><IntlProvider locale="en"><FormattedDate value={post.date} /></IntlProvider> - <i>{post.categoryTitle}</i></div>} />
-          <CardText>
-            Category: { post.categoryTitle }
-          </CardText>
-          <CardText>
+          <CardTitle title={ 
+            <h2 className={s.postTitle}><a href={"/post/"+post.slug} >{post.title}</a></h2>
+          } 
+          subtitle={
+            <div>
+              <FontIcon className="material-icons" style={styles.detailsIcon}>date_range</FontIcon>
+              <span style={styles.detailsText}><IntlProvider locale="en"><FormattedDate   value={post.date} /></IntlProvider></span>
+              <FontIcon className="material-icons" style={styles.detailsIcon}>label_outline</FontIcon><span style={styles.detailsText}>{post.categoryTitle}</span>
+            </div>
+          } />
+          <CardText href={"/post/"+post.slug}>
             { ReactHtmlParser(postContent) }
           </CardText>
           <PostSplit url={"/post/"+post.slug} />

@@ -26,6 +26,13 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
+import PostSplit from '../../components/Post/PostSplit';
+import FontIcon from 'material-ui/FontIcon';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
+
+
+
+var ReactDisqusThread = require('react-disqus-thread');
 
 class Post extends React.Component {
   
@@ -93,6 +100,10 @@ class Post extends React.Component {
     })(data.getCurrentContent())
     return postContent
   }
+  handleNewComment(comment) {
+    /* eslint no-console:0 */
+    console.log(comment);
+  }
   render() {
     const { slug } = this.props
     const { postData, postContent } = this.state
@@ -101,6 +112,21 @@ class Post extends React.Component {
       convoContent = this._convertPost(postContent)
       console.log(postData)
     }
+     const styles={
+      detailsIcon: {
+        color: "#9af1ad",
+        position: "relative",
+        top: "6px",
+      }, 
+      detailsText: {
+        fontSize: '16px',
+        padding: "0 10px",
+      },
+      relativeDiv: {
+        position: "relative",
+        width: "100%",
+      }
+    }
     return (
 
       <div className={s.container}>
@@ -108,10 +134,26 @@ class Post extends React.Component {
           <div className="mdl-cell mdl-cell--9-col">
             { postData ? 
               <div>
-                <h1>{postData.title}</h1> 
+                <h2 className={s.postTitle}>{postData.title}</h2> 
+                <div>
+                  <FontIcon className="material-icons" style={styles.detailsIcon}>date_range</FontIcon>
+                  <span style={styles.detailsText}><IntlProvider locale="en"><FormattedDate   value={postData.date} /></IntlProvider></span>
+                  <FontIcon className="material-icons" style={styles.detailsIcon}>label_outline</FontIcon><span style={styles.detailsText}>{postData.categoryTitle}</span>
+                </div>
+                <PostSplit url={ window.location.origin + "/post/"+slug} />
                 { ReactHtmlParser(convoContent) }
+                <PostSplit url={ window.location.origin + "/post/"+slug} />
+                <ReactDisqusThread
+                shortname="example"
+                identifier="something-unique-12345"
+                title="Example Thread"
+                url="http://www.example.com/example-thread"
+                category_id="123456"
+                onNewComment={this.handleNewComment}/>
               </div>
-            : null }
+            : 
+              <div style={styles.relativeDiv}><RefreshIndicator size={40} left={10} top={0} status="loading" /></div>
+             }
           </div>
           <div className="mdl-cell mdl-cell--3-col">
             <Sidebar />
